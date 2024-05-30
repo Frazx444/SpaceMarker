@@ -1,1 +1,0 @@
-print("Teste de envio ao repositório...")
