@@ -7,6 +7,9 @@ pygame.display.set_caption("Space Marker")
 branco  = (255,255,255) #tupla - definindo a cor da janela
 estrelas = pygame.image.load("assets/starsJW.png")
 
+
+fonte = pygame.font.SysFont("comicsans",14)
+
 clicksound = pygame.mixer.Sound("assets/ui-click-43196.mp3") #Var carregando som do Click
 
 pygame.mixer.music.load("assets/space-sound-hi-low-109574.mp3") #Música de fund
@@ -21,6 +24,14 @@ while True:
     
     tela.fill(branco) #cor
     tela.blit(estrelas, (0,0))
+    texto1 = fonte.render('Pressione F10 para Salvar os Pontos',True, branco)
+    texto2 = fonte.render('Pressione F11 para Carregar os Pontos',True, branco)
+    texto3 = fonte.render('Pressione F12 para Deletar os Pontos', True, branco)
+
+    tela.blit(texto1, (10, 10))
+    tela.blit(texto2, (10, 30))
+    tela.blit(texto3, (10, 50))
+
     pygame.display.update() #novos eventos na tela
     clock.tick(60) #atualização da tela 
 
