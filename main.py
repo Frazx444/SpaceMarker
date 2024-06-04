@@ -5,13 +5,15 @@ pygame.init() #inicialização de recursos
 tamanho  = (800, 600) #Variável - tamanho da tela
 clock = pygame.time.Clock() #frames por segundo
 tela = pygame.display.set_mode(tamanho) #tamanho da tela
-pygame.display.set_caption("Space Marker") 
-branco  = (255,255,255) #tupla - definindo a cor da janela
-fundo = pygame.image.load("assets/starsJW.png")
-pontoEstrela = pygame.image.load("assets/staricon.png")
-posicao = ()
-estrelas = {}
 
+fundo = pygame.image.load("assets/bg.jpg")
+#pontoEstrela = pygame.image.load("assets/staricon.png")
+pygame.display.set_caption("Space Marker")
+icone = pygame.image.load("assets/space.png") 
+pygame.display.set_icon(icone)
+
+branco  = (255,255,255) #tupla - definindo a cor da janela
+estrelas = {}
 
 fonte = pygame.font.SysFont("comicsans",14)
 
@@ -30,11 +32,14 @@ while True:
         elif evento.type == pygame.MOUSEBUTTONDOWN: #Se botão do mouse for press
             posicao = pygame.mouse.get_pos()
             pygame.mixer.Sound.play(clicksound) #Play som do click
-            #pygame.draw.circle(tela, branco, posicao, 6)
-            tela.blit(pontoEstrela, posicao)
-            digitenome = simpledialog.askstring('space', 'Digite o nome da estrela: ')
-            nomeestrela = fonte.render(digitenome, True, branco)
-            tela.blit(nomeestrela, (posicao[0],posicao[1]-10))
+            pygame.draw.circle(tela, branco, posicao, 4)
+            #tela.blit(pontoEstrela, posicao)
+            nome = simpledialog.askstring('space', 'Digite o nome da estrela: ')
+            if not nome:
+                nome = "desconhecido"
+            estrela = fonte.render(nome, True, branco)
+            estrelas[nome] = posicao
+            tela.blit(estrela, (posicao))
      
     
     texto1 = fonte.render('Pressione F10 para Salvar os Pontos',True, branco)
