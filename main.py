@@ -36,7 +36,7 @@ while True:
             #tela.blit(pontoEstrela, posicao)
             nome = simpledialog.askstring('space', 'Digite o nome da estrela: ')
             if not nome:
-                nome = "desconhecido"
+                nome = "desconhecido"+str(posicao)
             estrela = fonte.render(nome, True, branco)
             estrelas[nome] = posicao
             tela.blit(estrela, (posicao))
