@@ -8,6 +8,7 @@ tela = pygame.display.set_mode(tamanho) #tamanho da tela
 pygame.display.set_caption("Space Marker") 
 branco  = (255,255,255) #tupla - definindo a cor da janela
 fundo = pygame.image.load("assets/starsJW.png")
+pontoEstrela = pygame.image.load("assets/staricon.png")
 posicao = ()
 estrelas = {}
 
@@ -29,10 +30,11 @@ while True:
         elif evento.type == pygame.MOUSEBUTTONDOWN: #Se botão do mouse for press
             posicao = pygame.mouse.get_pos()
             pygame.mixer.Sound.play(clicksound) #Play som do click
-            pygame.draw.circle(tela, branco, posicao, 6)
+            #pygame.draw.circle(tela, branco, posicao, 6)
+            tela.blit(pontoEstrela, posicao)
             digitenome = simpledialog.askstring('space', 'Digite o nome da estrela: ')
             nomeestrela = fonte.render(digitenome, True, branco)
-            tela.blit(nomeestrela, (posicao))
+            tela.blit(nomeestrela, (posicao[0],posicao[1]-10))
      
     
     texto1 = fonte.render('Pressione F10 para Salvar os Pontos',True, branco)
