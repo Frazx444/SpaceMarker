@@ -1,5 +1,6 @@
 import pygame #importando lib do pygame
 from tkinter import simpledialog
+from os import remove
 
 pygame.init() #inicialização de recursos
 
@@ -18,18 +19,22 @@ pygame.mixer.music.play(-1)
 
 branco  = (255,255,255) #tupla - definindo a cor da janela
 
-tela.fill(branco) #cor
-tela.blit(fundo, (0,0))
+def inicio():
+    tela.fill(branco) #cor
+    tela.blit(fundo, (0,0))
 
-texto1 = fonte.render('Pressione F10 para Salvar os Pontos',True, branco)
-texto2 = fonte.render('Pressione F11 para Carregar os Pontos',True, branco)
-texto3 = fonte.render('Pressione F12 para Deletar os Pontos', True, branco)
+    texto1 = fonte.render('Pressione F10 para Salvar os Pontos',True, branco)
+    texto2 = fonte.render('Pressione F11 para Carregar os Pontos',True, branco)
+    texto3 = fonte.render('Pressione F12 para Deletar os Pontos', True, branco)
 
-tela.blit(texto1, (10, 10))
-tela.blit(texto2, (10, 30))
-tela.blit(texto3, (10, 50))
- 
+    tela.blit(texto1, (10, 10))
+    tela.blit(texto2, (10, 30))
+    tela.blit(texto3, (10, 50))
+
+inicio()
+
 estrelas = {}
+linhas = []
 while True:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT: #fechar o jogo
@@ -42,12 +47,16 @@ while True:
             nome = simpledialog.askstring('space', 'Digite o nome da estrela: ')
             if not nome:
                 nome = "desconhecido"+str(posicao)
-           
+
             estrelas[nome] = posicao
-            print(estrelas)
+            linhas.append(posicao)           
 
             estrela = fonte.render(nome, True, branco)
             tela.blit(estrela, (posicao))
+
+            if len(linhas) > 1:
+                pygame.draw.line(tela,branco,linhas[-1],linhas[-2],2)
+            
 
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_F10:  
@@ -60,6 +69,44 @@ while True:
                     arquivo = open("pontossalvos.txt","w",encoding="utf-8")
                     arquivo.write(str(estrelas))
                     arquivo.close()
+
+            elif evento.key == pygame.K_F11:
+                try:
+                    arquivo = open("pontossalvos.txt","r",encoding="utf-8")
+                    arquivosalvo = eval(arquivo.read())
+                    arquivo.close()
+                    
+                except:
+                    pass
                 
+                constelação = []
+                for key,value in arquivosalvo.items():
+                    
+                    estrela = fonte.render(key, True, branco)
+                    tela.blit(estrela,value)
+                    pygame.draw.circle(tela, branco, value, 4)
+                    constelação.append(value)
+                    
+                
+                while True:
+                    if len(constelação) > 1:
+                        pygame.draw.line(tela, branco, constelação[0], constelação[1],2)
+                        constelação.pop(0)                        
+                            
+                    else:
+                        break
+                
+            elif evento.key == pygame.K_F12:
+                inicio()
+                pygame.display.update()
+                
+                
+                '''try:
+                    remove("pontossalvos.txt")
+                except:
+                    pass'''
+                    
+
         pygame.display.update() #novos eventos na tela
         clock.tick(60) #atualização da tela
+    
