@@ -1,6 +1,7 @@
 import pygame #importando lib do pygame
 from tkinter import simpledialog
 from os import remove
+from funcoes import verificaarquivo
 
 pygame.init() #inicialização de recursos
 
@@ -38,7 +39,9 @@ linhas = []
 while True:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT: #fechar o jogo
+            verificaarquivo(estrelas)
             quit() #comando para fechar o jogo
+
         elif evento.type == pygame.MOUSEBUTTONDOWN: #Se botão do mouse for press
             posicao = pygame.mouse.get_pos()
             pygame.mixer.Sound.play(clicksound) #Play som do click
@@ -59,16 +62,12 @@ while True:
             
 
         elif evento.type == pygame.KEYDOWN:
-            if evento.key == pygame.K_F10:  
-                try:
-                    arquivo = open("pontossalvos.txt","r",encoding="utf-8")
-                    estrelas = eval(arquivo.write())
-                    arquivo.close()
+            if evento.key == pygame.K_ESCAPE:
+                verificaarquivo(estrelas)
+                quit()
 
-                except:
-                    arquivo = open("pontossalvos.txt","w",encoding="utf-8")
-                    arquivo.write(str(estrelas))
-                    arquivo.close()
+            elif evento.key == pygame.K_F10:  
+                verificaarquivo(estrelas)
 
             elif evento.key == pygame.K_F11:
                 try:
@@ -79,19 +78,20 @@ while True:
                 except:
                     pass
                 
-                constelação = []
+                #constelação = []
                 for key,value in arquivosalvo.items():
                     
                     estrela = fonte.render(key, True, branco)
+                    linhas.append(value)
                     tela.blit(estrela,value)
                     pygame.draw.circle(tela, branco, value, 4)
-                    constelação.append(value)
+                    
                     
                 
                 while True:
-                    if len(constelação) > 1:
-                        pygame.draw.line(tela, branco, constelação[0], constelação[1],2)
-                        constelação.pop(0)                        
+                    if len(linhas) > 1:
+                        pygame.draw.line(tela, branco, linhas[0], linhas[1],2)
+                        linhas.pop(0)                        
                             
                     else:
                         break
