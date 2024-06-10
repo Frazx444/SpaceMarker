@@ -78,7 +78,7 @@ while True:
                 except:
                     pass
                 
-                #constelação = []
+                
                 for key,value in arquivosalvo.items():
                     
                     estrela = fonte.render(key, True, branco)
