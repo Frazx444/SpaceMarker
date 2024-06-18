@@ -2,7 +2,7 @@ import pygame #importando lib do pygame
 from tkinter import simpledialog
 from os import remove
 from funcoes import verificaarquivo
-
+from math import sqrt
 pygame.init() #inicialização de recursos
 
 clock = pygame.time.Clock() #frames por segundo
@@ -40,26 +40,30 @@ while True:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT: #fechar o jogo
             verificaarquivo(estrelas)
-            quit() #comando para fechar o jogo
+            pygame.quit() #comando para fechar o jogo
 
         elif evento.type == pygame.MOUSEBUTTONDOWN: #Se botão do mouse for press
             posicao = pygame.mouse.get_pos()
             pygame.mixer.Sound.play(clicksound) #Play som do click
-            pygame.draw.circle(tela, branco, posicao, 4)
-            #tela.blit(pontoEstrela, posicao)
+            
             nome = simpledialog.askstring('space', 'Digite o nome da estrela: ')
-            if not nome:
+            if nome == None:
+                break
+
+            elif not nome:
                 nome = "desconhecido"+str(posicao)
+            
+            pygame.draw.circle(tela, branco, posicao, 4)
+            
 
             estrelas[nome] = posicao
-            linhas.append(posicao)           
+            linhas.append(posicao)  
+
+            if len(linhas) > 1:
+                pygame.draw.line(tela,branco,linhas[-1],linhas[-2],2)         
 
             estrela = fonte.render(nome, True, branco)
             tela.blit(estrela, (posicao))
-
-            if len(linhas) > 1:
-                pygame.draw.line(tela,branco,linhas[-1],linhas[-2],2)
-            
 
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_ESCAPE:
@@ -70,43 +74,50 @@ while True:
                 verificaarquivo(estrelas)
 
             elif evento.key == pygame.K_F11:
+                inicio()
+                linhas = []
                 try:
                     arquivo = open("pontossalvos.txt","r",encoding="utf-8")
                     arquivosalvo = eval(arquivo.read())
-                    arquivo.close()
-                    
+                    arquivo.close()                   
+                
+                    for key,value in arquivosalvo.items():                   
+                        estrela = fonte.render(key, True, branco)
+                        linhas.append(value)
+                        tela.blit(estrela,value)
+                        pygame.draw.circle(tela, branco, value, 4)               
                 except:
-                    pass
+                    pass 
                 
-                
-                for key,value in arquivosalvo.items():
-                    
-                    estrela = fonte.render(key, True, branco)
-                    linhas.append(value)
-                    tela.blit(estrela,value)
-                    pygame.draw.circle(tela, branco, value, 4)
-                    
-                    
                 
                 while True:
                     if len(linhas) > 1:
                         pygame.draw.line(tela, branco, linhas[0], linhas[1],2)
-                        linhas.pop(0)                        
-                            
+                    
+                        calculo_distancia = sqrt((linhas[0][0] - linhas[1][0]) ** 2 + (linhas[0][1] - linhas[1][1] ) ** 2)
+                        distancia = fonte.render(f"Distância: {calculo_distancia:.2f}", True, branco)
+                    
+                        ponto_mediox = ((linhas[1][0] + linhas[0][0]) / 2)
+                        ponto_medioy = ((linhas[0][1] + linhas[1][1]) / 2) 
+                        tela.blit(distancia,(ponto_mediox,ponto_medioy))
+                        
+                        #print(ponto_mediox)
+                        #print(ponto_medioy)
+                        
+                        linhas.pop(0)
+
                     else:
                         break
-                
-            elif evento.key == pygame.K_F12:
-                inicio()
-                pygame.display.update()
-                
-                
-                '''try:
+               
+            elif evento.key == pygame.K_F12:               
+                inicio()                
+                try:
                     remove("pontossalvos.txt")
                 except:
-                    pass'''
+                    pass
+                estrelas = {}   
+                linhas = []
                     
-
-        pygame.display.update() #novos eventos na tela
-        clock.tick(60) #atualização da tela
     
+    pygame.display.update() #novos eventos na tela
+    clock.tick(60) #atualização da tela

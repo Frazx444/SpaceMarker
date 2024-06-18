@@ -11,3 +11,5 @@ def verificaarquivo(estrelas):
     arquivo = open("pontossalvos.txt","w",encoding="utf-8")
     arquivo.write(str(estrelasatualizado))
     arquivo.close()
+
+    
