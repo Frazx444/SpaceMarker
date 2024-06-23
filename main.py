@@ -60,7 +60,17 @@ while True:
             linhas.append(posicao)  
 
             if len(linhas) > 1:
-                pygame.draw.line(tela,branco,linhas[-1],linhas[-2],2)         
+                pygame.draw.line(tela,branco,linhas[-1],linhas[-2],2) 
+
+                calculo_distancia = sqrt((linhas[0][0] - linhas[1][0]) ** 2 + (linhas[0][1] - linhas[1][1] ) ** 2)
+                distancia = fonte.render(f"Distância: {calculo_distancia:.2f}", True, branco)      
+
+                ponto_mediox = ((linhas[1][0] + linhas[0][0]) / 2)
+                ponto_medioy = ((linhas[0][1] + linhas[1][1]) / 2) 
+
+                tela.blit(distancia,(ponto_mediox,ponto_medioy))
+
+                linhas.pop(0)
 
             estrela = fonte.render(nome, True, branco)
             tela.blit(estrela, (posicao))
@@ -99,11 +109,9 @@ while True:
                     
                         ponto_mediox = ((linhas[1][0] + linhas[0][0]) / 2)
                         ponto_medioy = ((linhas[0][1] + linhas[1][1]) / 2) 
+                        
                         tela.blit(distancia,(ponto_mediox,ponto_medioy))
-                        
-                        #print(ponto_mediox)
-                        #print(ponto_medioy)
-                        
+
                         linhas.pop(0)
 
                     else:
@@ -117,7 +125,7 @@ while True:
                     pass
                 estrelas = {}   
                 linhas = []
-                    
-    
+                
     pygame.display.update() #novos eventos na tela
+   
     clock.tick(60) #atualização da tela
